@@ -35,8 +35,8 @@ public class BootstrapData implements CommandLineRunner {
         Book dddSaved = this.bookRepository.save(ddd);
 
         Author rod = new Author();
-        eric.setFirstname("Rod");
-        eric.setLastname("Johnson");
+        rod.setFirstname("Rod");
+        rod.setLastname("Johnson");
 
         Book noEJB = new Book();
         noEJB.setTitle("J2EE Development without EJB");
@@ -46,19 +46,27 @@ public class BootstrapData implements CommandLineRunner {
         Book noEJBSaved = this.bookRepository.save(noEJB);
 
         ericSaved.getBooks().add(dddSaved);
+        dddSaved.getAuthors().add(ericSaved);
         rodSaved.getBooks().add(noEJBSaved);
+        noEJBSaved.getAuthors().add(rodSaved);
+
+        Publisher publisher = new Publisher();
+        publisher.setPublisherName("My Publisher");
+        publisher.setAddress("123 Main");
+        Publisher savedPublisher = this.publisherRepository.save(publisher);
+
+        noEJBSaved.setPublisher(savedPublisher);
+        dddSaved.setPublisher(savedPublisher);
 
         this.authorRepository.save(ericSaved);
         this.authorRepository.save(rodSaved);
+        this.bookRepository.save(noEJBSaved);
+        this.bookRepository.save(dddSaved);
 
         System.out.println("In Bootstrap");
         System.out.println("Author Count " + this.authorRepository.count());
         System.out.println("Book Count " + this.bookRepository.count());
 
-        Publisher publisher = new Publisher();
-        publisher.setPublisherName("My Publisher");
-        publisher.setAddress("123 Main");
-        this.publisherRepository.save(publisher);
         System.out.println("Publisher Count " + this.publisherRepository.count());
 
     }
